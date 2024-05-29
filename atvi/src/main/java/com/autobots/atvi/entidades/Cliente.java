@@ -1,8 +1,9 @@
 package com.autobots.atvi.entidades;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -19,26 +20,29 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String nome;
 
-    @Column
+    @Column(nullable = false)
     private String nomeSocial;
 
-    @Column
+    @Column(nullable = false)
     private Date dataNascimento;
 
-    @Column
+    @Column(nullable = false)
     private Date dataCadastro;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Documento> documentos = new ArrayList<Documento>();
-    
-    @OneToOne(cascade = CascadeType.ALL)
-    private Endereco endereco;
+    @OneToMany(mappedBy = "cliente")
+    @JsonManagedReference
+    private List<Documento> documentos;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Telefone> telefones = new ArrayList<Telefone>();
+    @OneToMany(mappedBy = "cliente")
+    @JsonManagedReference
+    private List<Telefone> telefones;
+
+    @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Endereco endereco;
 
     public Long getId() {
         return id;
@@ -88,14 +92,6 @@ public class Cliente {
         this.documentos = documentos;
     }
 
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
-
     public List<Telefone> getTelefones() {
         return telefones;
     }
@@ -103,4 +99,13 @@ public class Cliente {
     public void setTelefones(List<Telefone> telefones) {
         this.telefones = telefones;
     }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+    
 }

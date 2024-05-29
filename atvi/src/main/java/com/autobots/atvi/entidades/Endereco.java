@@ -1,10 +1,14 @@
 package com.autobots.atvi.entidades;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Endereco {
@@ -12,26 +16,31 @@ public class Endereco {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String estado;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String cidade;
     
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String bairro;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String rua;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String numero;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String codigoPostal;
 
     @Column
     private String informacoesAdicionais;
+
+    @OneToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    @JsonBackReference
+    private Cliente cliente;
 
     public Long getId() {
         return id;
@@ -96,4 +105,14 @@ public class Endereco {
     public void setInformacoesAdicionais(String informacoesAdicionais) {
         this.informacoesAdicionais = informacoesAdicionais;
     }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    
 }
