@@ -3,8 +3,6 @@ package com.autobots.atvi.entidades;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,16 +30,13 @@ public class Cliente {
     @Column(nullable = false)
     private Date dataCadastro;
 
-    @OneToMany(mappedBy = "cliente")
-    @JsonManagedReference
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Documento> documentos;
 
-    @OneToMany(mappedBy = "cliente")
-    @JsonManagedReference
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Telefone> telefones;
 
-    @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Endereco endereco;
 
     public Long getId() {

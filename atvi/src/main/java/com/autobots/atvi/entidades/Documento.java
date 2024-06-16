@@ -1,7 +1,5 @@
 package com.autobots.atvi.entidades;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,8 +21,7 @@ public class Documento {
     private String numero;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false)
-    @JsonBackReference
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
     public Long getId() {
@@ -57,7 +54,5 @@ public class Documento {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
-    }
-
-    
+    }    
 }
