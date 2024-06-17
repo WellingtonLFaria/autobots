@@ -3,6 +3,8 @@ package com.autobots.atvi.entidades;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +15,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class Cliente {
+public class Cliente extends RepresentationModel<Cliente> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

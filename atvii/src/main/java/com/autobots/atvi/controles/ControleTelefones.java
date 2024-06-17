@@ -18,6 +18,11 @@ import com.autobots.atvi.repositorios.RepositorioCliente;
 import com.autobots.atvi.repositorios.RepositorioTelefone;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("telefones")
 public class ControleTelefones {

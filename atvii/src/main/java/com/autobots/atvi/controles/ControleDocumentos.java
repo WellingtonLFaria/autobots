@@ -18,6 +18,13 @@ import com.autobots.atvi.repositorios.RepositorioCliente;
 import com.autobots.atvi.repositorios.RepositorioDocumento;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("documentos")
 public class ControleDocumentos {
@@ -32,9 +39,17 @@ public class ControleDocumentos {
     @GetMapping
     public ResponseEntity<?> getDocumentos() {
         try {
-            if (repositorioDocumento.findAll().isEmpty())
+            List<Documento> todosDocumentos = repositorioDocumento.findAll();
+            if (todosDocumentos.isEmpty())
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            return new ResponseEntity<>(repositorioDocumento.findAll(), HttpStatus.FOUND);
+
+            todosDocumentos.forEach(documento -> documento
+                    .add(linkTo(methodOn(ControleDocumentos.class).getDocumento(documento.getId())).withSelfRel()));
+
+            Link link = linkTo(methodOn(ControleDocumentos.class).getDocumentos()).withSelfRel();
+            CollectionModel<Documento> resultado = CollectionModel.of(todosDocumentos, link);
+
+            return new ResponseEntity<>(resultado, HttpStatus.FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -45,7 +60,9 @@ public class ControleDocumentos {
         try {
             if (!repositorioDocumento.findById(id).isPresent())
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            return new ResponseEntity<>(repositorioDocumento.findById(id).get(), HttpStatus.FOUND);
+            Documento documento = repositorioDocumento.findById(id).get();
+            documento.add(linkTo(methodOn(ControleDocumentos.class).getDocumento(id)).withSelfRel());
+            return new ResponseEntity<>(documento, HttpStatus.FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -79,8 +96,10 @@ public class ControleDocumentos {
     @PostMapping("{clienteID}")
     public ResponseEntity<?> postDocumento(@PathVariable Long clienteID, @RequestBody Documento documento) {
         try {
-            if (!repositorioCliente.findById(clienteID).isPresent()) return new ResponseEntity<>("Cliente não encontrado", HttpStatus.NOT_FOUND);
-            if (repositorioDocumento.findByNumero(documento.getNumero()).isPresent()) return new ResponseEntity<>("Documento já cadastrado", HttpStatus.CONFLICT);
+            if (!repositorioCliente.findById(clienteID).isPresent())
+                return new ResponseEntity<>("Cliente não encontrado", HttpStatus.NOT_FOUND);
+            if (repositorioDocumento.findByNumero(documento.getNumero()).isPresent())
+                return new ResponseEntity<>("Documento já cadastrado", HttpStatus.CONFLICT);
             Cliente cliente = repositorioCliente.findById(clienteID).get();
             cliente.getDocumentos().add(documento);
             repositorioCliente.save(cliente);

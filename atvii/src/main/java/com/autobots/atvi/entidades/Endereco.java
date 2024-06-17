@@ -1,5 +1,7 @@
 package com.autobots.atvi.entidades;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,7 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Endereco {
+public class Endereco extends RepresentationModel<Endereco> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

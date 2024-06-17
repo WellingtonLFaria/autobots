@@ -1,5 +1,7 @@
 package com.autobots.atvi.entidades;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,13 +11,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Documento {
+public class Telefone extends RepresentationModel<Telefone> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String tipo;
+    private String ddd;
 
     @Column(nullable = false, unique = true)
     private String numero;
@@ -32,12 +34,12 @@ public class Documento {
         this.id = id;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getDdd() {
+        return ddd;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setDdd(String ddd) {
+        this.ddd = ddd;
     }
 
     public String getNumero() {
@@ -54,5 +56,5 @@ public class Documento {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
-    }    
+    }
 }
