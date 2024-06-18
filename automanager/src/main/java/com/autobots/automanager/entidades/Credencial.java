@@ -1,32 +1,26 @@
 package com.autobots.automanager.entidades;
 
-import java.util.Date;
+import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
-import org.springframework.hateoas.RepresentationModel;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
+@SuppressWarnings("serial")
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@EqualsAndHashCode(callSuper=false)
-public abstract class Credencial extends RepresentationModel<Credencial> {
+public class Credencial implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(nullable = false, unique = true)
+	private String nomeUsuario;
+	
 	@Column(nullable = false)
-	private Date criacao;
-	@Column()
-	private Date ultimoAcesso;
-	@Column(nullable = false)
-	private boolean inativo;
+	private String senha;
 }

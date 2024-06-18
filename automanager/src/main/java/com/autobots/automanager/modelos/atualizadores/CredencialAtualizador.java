@@ -10,13 +10,12 @@ import com.autobots.automanager.entidades.Credencial;
 public class CredencialAtualizador {
     public void atualizar(Credencial credencial, Credencial atualizacao) {
         if (atualizacao != null) {
-            if (atualizacao.getCriacao() != null) {
-                credencial.setCriacao(atualizacao.getCriacao());
+            if (atualizacao.getNomeUsuario() != null && !atualizacao.getNomeUsuario().isBlank()) {
+                credencial.setNomeUsuario(atualizacao.getNomeUsuario());
             }
-            if (atualizacao.getUltimoAcesso() != null) {
-                credencial.setUltimoAcesso(atualizacao.getUltimoAcesso());
+            if (atualizacao.getSenha() != null && !atualizacao.getSenha().isBlank()) {
+                credencial.setSenha(atualizacao.getSenha());
             }
-            credencial.setInativo(atualizacao.isInativo());
         }
     }
 

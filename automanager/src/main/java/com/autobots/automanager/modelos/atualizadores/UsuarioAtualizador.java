@@ -2,7 +2,6 @@ package com.autobots.automanager.modelos.atualizadores;
 
 import org.springframework.stereotype.Service;
 
-import com.autobots.automanager.entidades.Credencial;
 import com.autobots.automanager.entidades.Documento;
 import com.autobots.automanager.entidades.Email;
 import com.autobots.automanager.entidades.Mercadoria;
@@ -10,7 +9,7 @@ import com.autobots.automanager.entidades.Telefone;
 import com.autobots.automanager.entidades.Usuario;
 import com.autobots.automanager.entidades.Veiculo;
 import com.autobots.automanager.entidades.Venda;
-import com.autobots.automanager.enumeracoes.PerfilUsuario;
+import com.autobots.automanager.modelos.Perfil;
 import com.autobots.automanager.modelos.StringVerificadorNulo;
 
 @Service
@@ -30,7 +29,7 @@ public class UsuarioAtualizador {
 					usuario.getPerfis().clear();
 				} else {
 					usuario.getPerfis().clear();
-					for (PerfilUsuario objeto : atualizacao.getPerfis()) {
+					for (Perfil objeto : atualizacao.getPerfis()) {
 						usuario.getPerfis().add(objeto);
 					}
 				}
@@ -68,15 +67,8 @@ public class UsuarioAtualizador {
 					}
 				}
 			}
-			if (atualizacao.getCredenciais() != null) {
-				if (atualizacao.getCredenciais().isEmpty()) {
-					usuario.getCredenciais().clear();
-				} else {
-					usuario.getCredenciais().clear();
-					for (Credencial credencial : atualizacao.getCredenciais()) {
-						usuario.getCredenciais().add(credencial);
-					}
-				}
+			if (atualizacao.getCredencial() != null) {
+				usuario.setCredencial(atualizacao.getCredencial());
 			}
 			if (atualizacao.getMercadorias() != null) {
 				if (atualizacao.getMercadorias().isEmpty()) {
