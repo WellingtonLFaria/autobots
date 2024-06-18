@@ -3,15 +3,14 @@ package com.autobots.automanager.modelos;
 import org.springframework.stereotype.Service;
 
 import com.autobots.automanager.entidades.Cliente;
+import com.autobots.automanager.entidades.Documento;
+import com.autobots.automanager.entidades.Telefone;
 
 @Service
 public class ClienteAtualizador {
 	private StringVerificadorNulo verificador = new StringVerificadorNulo();
-	private EnderecoAtualizador enderecoAtualizador = new EnderecoAtualizador();
-	private DocumentoAtualizador documentoAtualizador = new DocumentoAtualizador();
-	private TelefoneAtualizador telefoneAtualizador = new TelefoneAtualizador();
 
-	private void atualizarDados(Cliente cliente, Cliente atualizacao) {
+	public void atualizar(Cliente cliente, Cliente atualizacao) {
 		if (!verificador.verificar(atualizacao.getNome())) {
 			cliente.setNome(atualizacao.getNome());
 		}
@@ -24,12 +23,28 @@ public class ClienteAtualizador {
 		if (!(atualizacao.getDataNascimento() == null)) {
 			cliente.setDataNascimento(atualizacao.getDataNascimento());
 		}
-	}
-
-	public void atualizar(Cliente cliente, Cliente atualizacao) {
-		atualizarDados(cliente, atualizacao);
-		enderecoAtualizador.atualizar(cliente.getEndereco(), atualizacao.getEndereco());
-		documentoAtualizador.atualizar(cliente.getDocumentos(), atualizacao.getDocumentos());
-		telefoneAtualizador.atualizar(cliente.getTelefones(), atualizacao.getTelefones());
+		if (atualizacao.getEndereco() != null) {
+			cliente.setEndereco(atualizacao.getEndereco());
+		}
+		if (atualizacao.getDocumentos() != null) {
+			if (atualizacao.getDocumentos().isEmpty()) {
+				cliente.getDocumentos().clear();
+			} else {
+				cliente.getDocumentos().clear();
+				for (Documento documento: atualizacao.getDocumentos()) {
+					cliente.getDocumentos().add(documento);
+				}
+			}
+		}
+		if (atualizacao.getTelefones() != null) {
+			if (atualizacao.getTelefones().isEmpty()) {
+				cliente.getTelefones().clear();
+			} else {
+				cliente.getTelefones().clear();
+				for (Telefone telefone: atualizacao.getTelefones()) {
+					cliente.getTelefones().add(telefone);
+				}
+			}
+		}
 	}
 }

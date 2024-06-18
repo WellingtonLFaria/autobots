@@ -16,79 +16,86 @@ import org.springframework.web.bind.annotation.RestController;
 import com.autobots.automanager.entidades.Cliente;
 import com.autobots.automanager.modelos.AdicionadorLinkCliente;
 import com.autobots.automanager.modelos.ClienteAtualizador;
-import com.autobots.automanager.modelos.ClienteSelecionador;
 import com.autobots.automanager.repositorios.ClienteRepositorio;
 
 @RestController
 public class ClienteControle {
-	@Autowired
-	private ClienteRepositorio repositorio;
-	@Autowired
-	private ClienteSelecionador selecionador;
-	@Autowired
-	private AdicionadorLinkCliente adicionadorLink;
+    @Autowired
+    private ClienteRepositorio repositorio;
 
-	@GetMapping("/cliente/{id}")
-	public ResponseEntity<Cliente> obterCliente(@PathVariable long id) {
-		List<Cliente> clientes = repositorio.findAll();
-		Cliente cliente = selecionador.selecionar(clientes, id);
-		if (cliente == null) {
-			ResponseEntity<Cliente> resposta = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			return resposta;
-		} else {
-			adicionadorLink.adicionarLink(cliente);
-			ResponseEntity<Cliente> resposta = new ResponseEntity<Cliente>(cliente, HttpStatus.FOUND);
-			return resposta;
-		}
-	}
+    @Autowired
+    private AdicionadorLinkCliente adicionadorLink;
 
-	@GetMapping("/clientes")
-	public ResponseEntity<List<Cliente>> obterClientes() {
-		List<Cliente> clientes = repositorio.findAll();
-		if (clientes.isEmpty()) {
-			ResponseEntity<List<Cliente>> resposta = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			return resposta;
-		} else {
-			adicionadorLink.adicionarLink(clientes);
-			ResponseEntity<List<Cliente>> resposta = new ResponseEntity<>(clientes, HttpStatus.FOUND);
-			return resposta;
-		}
-	}
+    @Autowired
+    private ClienteAtualizador atualizador;
 
-	@PostMapping("/cliente/cadastro")
-	public ResponseEntity<?> cadastrarCliente(@RequestBody Cliente cliente) {
-		HttpStatus status = HttpStatus.CONFLICT;
-		if (cliente.getId() == null) {
-			repositorio.save(cliente);
-			status = HttpStatus.CREATED;
-		}
-		return new ResponseEntity<>(status);
+    @GetMapping("/cliente/{id}")
+    public ResponseEntity<?> obterCliente(@PathVariable Long id) {
+        try {
+            if (!repositorio.findById(id).isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-	}
+            Cliente cliente = repositorio.findById(id).get();
+            adicionadorLink.adicionarLink(cliente);
 
-	@PutMapping("/cliente/atualizar")
-	public ResponseEntity<?> atualizarCliente(@RequestBody Cliente atualizacao) {
-		HttpStatus status = HttpStatus.CONFLICT;
-		Cliente cliente = repositorio.getById(atualizacao.getId());
-		if (cliente != null) {
-			ClienteAtualizador atualizador = new ClienteAtualizador();
-			atualizador.atualizar(cliente, atualizacao);
-			repositorio.save(cliente);
-			status = HttpStatus.OK;
-		} else {
-			status = HttpStatus.BAD_REQUEST;
-		}
-		return new ResponseEntity<>(status);
-	}
+            return new ResponseEntity<>(cliente, HttpStatus.FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	@DeleteMapping("/cliente/excluir")
-	public ResponseEntity<?> excluirCliente(@RequestBody Cliente exclusao) {
-		HttpStatus status = HttpStatus.BAD_REQUEST;
-		Cliente cliente = repositorio.getById(exclusao.getId());
-		if (cliente != null) {
-			repositorio.delete(cliente);
-			status = HttpStatus.OK;
-		}
-		return new ResponseEntity<>(status);
-	}
+    @GetMapping("/clientes")
+    public ResponseEntity<?> obterClientes() {
+        try {
+            if (repositorio.findAll().isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            
+            List<Cliente> clientes = repositorio.findAll();
+            adicionadorLink.adicionarLink(clientes);
+
+            return new ResponseEntity<>(clientes, HttpStatus.FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PostMapping("/cliente/cadastro")
+    public ResponseEntity<?> cadastrarCliente(@RequestBody Cliente cliente) {
+        try {
+            repositorio.save(cliente);
+
+            adicionadorLink.adicionarLink(cliente);
+
+            return new ResponseEntity<>(cliente, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/cliente/atualizar")
+    public ResponseEntity<?> atualizarCliente(@RequestBody Cliente atualizacao) {
+        try {
+            if (!repositorio.findById(atualizacao.getId()).isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            
+            Cliente cliente = repositorio.findById(atualizacao.getId()).get();
+            atualizador.atualizar(cliente, atualizacao);
+            repositorio.save(cliente);
+
+            adicionadorLink.adicionarLink(cliente);
+
+            return new ResponseEntity<>(cliente, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/cliente/excluir")
+    public ResponseEntity<?> deletarCliente(@RequestBody Cliente exclusao) {
+        try {
+            if (!repositorio.findById(exclusao.getId()).isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            Cliente cliente = repositorio.findById(exclusao.getId()).get();
+            repositorio.delete(cliente);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
