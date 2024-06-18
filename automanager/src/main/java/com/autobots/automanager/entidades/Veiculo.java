@@ -1,4 +1,4 @@
-package com.autobots.automanager.entitades;
+package com.autobots.automanager.entidades;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,15 +13,17 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.autobots.automanager.enumeracoes.TipoVeiculo;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(exclude = { "proprietario", "vendas" })
+@EqualsAndHashCode(exclude = { "proprietario", "vendas" }, callSuper = false)
 @Entity
-public class Veiculo {
+public class Veiculo extends RepresentationModel<Veiculo> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

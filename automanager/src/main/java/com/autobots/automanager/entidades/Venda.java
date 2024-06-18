@@ -1,4 +1,4 @@
-package com.autobots.automanager.entitades;
+package com.autobots.automanager.entidades;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -15,13 +15,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(exclude = { "cliente", "funcionario", "veiculo" })
+@EqualsAndHashCode(exclude = { "cliente", "funcionario", "veiculo" }, callSuper = false)
 @Entity
-public class Venda {
+public class Venda extends RepresentationModel<Venda>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

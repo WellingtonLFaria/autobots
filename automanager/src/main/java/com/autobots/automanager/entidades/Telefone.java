@@ -1,28 +1,25 @@
-package com.autobots.automanager.entitades;
-
-import java.util.Date;
+package com.autobots.automanager.entidades;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+
+import org.springframework.hateoas.RepresentationModel;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Credencial {
-	@Id()
+public class Telefone extends RepresentationModel<Telefone> {
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false)
-	private Date criacao;
-	@Column()
-	private Date ultimoAcesso;
+	private String ddd;
 	@Column(nullable = false)
-	private boolean inativo;
+	private String numero;
 }

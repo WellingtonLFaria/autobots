@@ -1,6 +1,4 @@
-package com.autobots.automanager.entitades;
-
-import java.util.Date;
+package com.autobots.automanager.entidades;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,26 +6,30 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 @Entity
-public class Mercadoria {
+public class Endereco extends RepresentationModel<Endereco> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false)
-	private Date validade;
+	private String estado;
 	@Column(nullable = false)
-	private Date fabricao;
+	private String cidade;
 	@Column(nullable = false)
-	private Date cadastro;
+	private String bairro;
 	@Column(nullable = false)
-	private String nome;
+	private String rua;
 	@Column(nullable = false)
-	private long quantidade;
+	private String numero;
 	@Column(nullable = false)
-	private double valor;
+	private String codigoPostal;
 	@Column()
-	private String descricao;
+	private String informacoesAdicionais;
 }
