@@ -2,9 +2,12 @@ package com.autobots.automanager.modelos.atualizadores;
 
 import java.util.Set;
 
+import org.springframework.stereotype.Service;
+
 import com.autobots.automanager.entidades.Servico;
 import com.autobots.automanager.modelos.StringVerificadorNulo;
 
+@Service
 public class ServicoAtualizador {
     private StringVerificadorNulo verificador = new StringVerificadorNulo();
 

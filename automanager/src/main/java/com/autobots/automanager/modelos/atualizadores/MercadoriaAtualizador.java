@@ -2,9 +2,12 @@ package com.autobots.automanager.modelos.atualizadores;
 
 import java.util.Set;
 
+import org.springframework.stereotype.Service;
+
 import com.autobots.automanager.entidades.Mercadoria;
 import com.autobots.automanager.modelos.StringVerificadorNulo;
 
+@Service
 public class MercadoriaAtualizador {
     private StringVerificadorNulo verificador = new StringVerificadorNulo();
 

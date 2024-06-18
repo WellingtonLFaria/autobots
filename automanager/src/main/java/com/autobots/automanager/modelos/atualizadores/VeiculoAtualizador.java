@@ -2,9 +2,13 @@ package com.autobots.automanager.modelos.atualizadores;
 
 import java.util.Set;
 
+import org.springframework.stereotype.Service;
+
 import com.autobots.automanager.entidades.Veiculo;
+import com.autobots.automanager.entidades.Venda;
 import com.autobots.automanager.modelos.StringVerificadorNulo;
 
+@Service
 public class VeiculoAtualizador {
     private StringVerificadorNulo verificador = new StringVerificadorNulo();
 
@@ -23,7 +27,14 @@ public class VeiculoAtualizador {
                 veiculo.setProprietario(atualizacao.getProprietario());
             }
             if (atualizacao.getVendas() != null) {
-                veiculo.setVendas(atualizacao.getVendas());
+                if (atualizacao.getVendas().isEmpty()) {
+					veiculo.getVendas().clear();
+				} else {
+					veiculo.getVendas().clear();
+					for (Venda objeto : atualizacao.getVendas()) {
+						veiculo.getVendas().add(objeto);
+					}
+				}
             }
         }
     }

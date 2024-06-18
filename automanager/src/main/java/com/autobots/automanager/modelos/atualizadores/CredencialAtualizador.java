@@ -2,8 +2,11 @@ package com.autobots.automanager.modelos.atualizadores;
 
 import java.util.Set;
 
+import org.springframework.stereotype.Service;
+
 import com.autobots.automanager.entidades.Credencial;
 
+@Service
 public class CredencialAtualizador {
     public void atualizar(Credencial credencial, Credencial atualizacao) {
         if (atualizacao != null) {

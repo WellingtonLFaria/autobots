@@ -2,9 +2,14 @@ package com.autobots.automanager.modelos.atualizadores;
 
 import java.util.Set;
 
+import org.springframework.stereotype.Service;
+
+import com.autobots.automanager.entidades.Mercadoria;
+import com.autobots.automanager.entidades.Servico;
 import com.autobots.automanager.entidades.Venda;
 import com.autobots.automanager.modelos.StringVerificadorNulo;
 
+@Service
 public class VendaAtualizador {
     private StringVerificadorNulo verificador = new StringVerificadorNulo();
 
@@ -23,10 +28,28 @@ public class VendaAtualizador {
                 venda.setFuncionario(atualizacao.getFuncionario());
             }
             if (atualizacao.getMercadorias() != null) {
-                venda.setMercadorias(atualizacao.getMercadorias());
+                if (atualizacao.getMercadorias() != null) {
+                    if (atualizacao.getMercadorias().isEmpty()) {
+                        venda.getMercadorias().clear();
+                    } else {
+                        venda.getMercadorias().clear();
+                        for (Mercadoria objeto : atualizacao.getMercadorias()) {
+                            venda.getMercadorias().add(objeto);
+                        }
+                    }
+                }
             }
             if (atualizacao.getServicos() != null) {
-                venda.setServicos(atualizacao.getServicos());
+                if (atualizacao.getServicos() != null) {
+                    if (atualizacao.getServicos().isEmpty()) {
+                        venda.getServicos().clear();
+                    } else {
+                        venda.getServicos().clear();
+                        for (Servico objeto : atualizacao.getServicos()) {
+                            venda.getServicos().add(objeto);
+                        }
+                    }
+                }
             }
             if (atualizacao.getVeiculo() != null) {
                 venda.setVeiculo(atualizacao.getVeiculo());
